@@ -81,9 +81,7 @@ const validateCsvRow = (dataHeaders, rowData) => {
 
         validEmails = rowData[index].match(regex);   
 
-        if ( validEmails ) {  
-
-          //console.log(validEmails);
+        if ( validEmails ) {            
 
           validEmails.forEach((email, i) => {
             var temp = {...addrs};
