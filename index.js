@@ -61,15 +61,13 @@ const revomeCaracteresFromPhone = (number) => {
   return number.replace(regex, "");
 };
 
-const normalizeBooleanValues = (resultArr, header, data) => {    
-  const trueValues = ["yes", "1"];  
+const normalizeBooleanValues = (resultArr, header, data) => {
+  const trueValues = ["yes", "1"];
   if (trueValues.includes(data.trim())) {
     resultArr[header] = true;
   } else {
     resultArr[header] = false;
-  }  
-  //console.log(data, trueValues.includes(data));
-  
+  }
 };
 
 const validateCsvRowData = (dataHeaders, rowData) => {
@@ -94,7 +92,9 @@ const validateCsvRowData = (dataHeaders, rowData) => {
       if (rowData[index].length) {
         const number = phoneUtil.parseAndKeepRawInput(rowData[index], "BR");
         if (phoneUtil.isValidNumberForRegion(number, "BR")) {
-          addrs["address"] = phoneUtil.format(number, PNF.E164).replace('+', '');
+          addrs["address"] = phoneUtil
+            .format(number, PNF.E164)
+            .replace("+", "");
           result["addresses"].push(addrs);
         }
       }
@@ -114,10 +114,8 @@ const validateCsvRowData = (dataHeaders, rowData) => {
       }
       delete result[header];
     }
-    if (["invisible", "see_all"].includes(header)) {    
-      //console.log(header, rowData[index],  ["yes", "1"].includes(rowData[index]);
-      normalizeBooleanValues(result, header, rowData[index]);        
-      
+    if (["invisible", "see_all"].includes(header)) {      
+      normalizeBooleanValues(result, header, rowData[index]);
     }
   });
   return result;
