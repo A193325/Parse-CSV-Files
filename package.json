@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "google-libphonenumber": "^3.2.25",
+    "lodash": "^4.17.21"
+  }
+}
