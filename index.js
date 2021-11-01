@@ -56,18 +56,14 @@ const splitHeaderTags = (header) => {
   return addrs;
 };
 
-const revomeCaracteresFromPhone = (number) => {
+const removeCaracteresFromPhone = (number) => {
   const regex = /[^\d\+]/g;
   return number.replace(regex, "");
 };
 
 const normalizeBooleanValues = (resultArr, header, data) => {
-  const trueValues = ["yes", "1"];
-  if (trueValues.includes(data.trim())) {
-    resultArr[header] = true;
-  } else {
-    resultArr[header] = false;
-  }
+  const trueValues = ["yes", "1"]; 
+  resultArr[header] = trueValues.includes(data.trim());  
 };
 
 const validateCsvRowData = (dataHeaders, rowData) => {
@@ -87,7 +83,7 @@ const validateCsvRowData = (dataHeaders, rowData) => {
 
     if (_.startsWith(header, "phone")) {
       var addrs = splitHeaderTags(header);
-      rowData[index] = revomeCaracteresFromPhone(rowData[index]);
+      rowData[index] = removeCaracteresFromPhone(rowData[index]);
 
       if (rowData[index].length) {
         const number = phoneUtil.parseAndKeepRawInput(rowData[index], "BR");
