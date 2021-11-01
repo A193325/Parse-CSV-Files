@@ -159,12 +159,6 @@ dataArray = validateCsvData(dataArray);
 
 dataArray = mergeDuplicates(dataArray);
 
-//console.log(JSON.stringify(dataArray));
-
-
-
 writeFile(pathOutput, JSON.stringify(dataArray));
-
-//console.log(dataArray);
 
 console.log("Script Finalizado.");
