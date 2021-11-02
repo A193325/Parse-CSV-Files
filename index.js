@@ -148,8 +148,8 @@ const mergeDuplicateIds = (validatedData) => {
   return mergedData;
 };
 
-pathInput = "./input1.csv";
-pathOutput = "./output1.json";
+pathInput = "./input.csv";
+pathOutput = "./output.json";
 var resultArray = splitFileOnRowsArrays(pathInput);
 resultArray = splitRowsByCommas(resultArray);
 resultArray = validateCsvData(resultArray);
