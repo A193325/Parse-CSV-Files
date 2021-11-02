@@ -13,19 +13,16 @@ const writeFile = (path, data) => {
 };
 
 const splitRowsByCommas = (arr) => {
-  var result = new Array();
+  const result = []; 
   const regex = /,(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)/;
-  if (arr) {
-    arr.forEach((row, index) => {
-      result[index] = _.split(row, regex);
-    });
-  }
-  return result;
+  if (arr) { 
+    return arr.map((row) => row.split(regex));  
+  }  
 };
 
 const normalizeGroupsData = (groups) => {
-  tmpGroups = [];
-  groups.forEach((group) => {
+  let tmpGroups = [];    
+  groups.forEach((group) => { 
     if (group.length > 0) {
       group = group.trim();
       tmpGroups = [...tmpGroups, group];
@@ -36,10 +33,11 @@ const normalizeGroupsData = (groups) => {
 
 const combineGroupsData = (resultArray, currGroups) => {
   const regex = /,|\/|"/;
-  var splitedGroups = currGroups.split(regex);
-  resultArray["groups"] = _.union(resultArray["groups"], splitedGroups);
-  resultArray["groups"] = normalizeGroupsData(resultArray["groups"]);
-  delete resultArray["group"];
+  const splitedGroups = currGroups.split(regex); 
+  const result = resultArray; 
+  result["groups"] = _.union(result["groups"], splitedGroups);   
+  result["groups"] = normalizeGroupsData(result["groups"]);
+  delete result["group"];
 };
 
 const removeQuotesFromHeader = (header) => {
@@ -48,11 +46,14 @@ const removeQuotesFromHeader = (header) => {
 };
 
 const splitHeaderTags = (header) => {
-  var addrs = new Object();
+  var addrs = {
+    type: '',
+    tags: [],
+  }; 
   var splitedHeader = _.split(header, " ");
-  addrs["type"] = splitedHeader[0];
+  addrs.type = splitedHeader[0]; 
   _.pull(splitedHeader, splitedHeader[0]);
-  addrs["tags"] = splitedHeader;
+  addrs.tags = splitedHeader;
   return addrs;
 };
 
@@ -62,14 +63,14 @@ const removeCaracteresFromPhone = (number) => {
 };
 
 const normalizeBooleanValues = (resultArr, header, data) => {
-  const trueValues = ["yes", "1"]; 
-  resultArr[header] = trueValues.includes(data.trim());  
+  const trueValues = ["yes", "1"];
+  resultArr[header] = trueValues.includes(data.trim());
 };
 
 const validateCsvRowData = (dataHeaders, rowData) => {
-  var result = {};
-  result["groups"] = [];
-  result["addresses"] = [];
+  const result = {}; 
+  result.groups = [];
+  result.addresses = [];
 
   dataHeaders.forEach((header, index) => {
     header = removeQuotesFromHeader(header);
@@ -110,34 +111,28 @@ const validateCsvRowData = (dataHeaders, rowData) => {
       }
       delete result[header];
     }
-    if (["invisible", "see_all"].includes(header)) {      
+    if (["invisible", "see_all"].includes(header)) {
       normalizeBooleanValues(result, header, rowData[index]);
     }
   });
   return result;
 };
 
-const validateCsvData = (arr) => {
-  const dataHeaders = arr[0];
-  const dataRows = arr.slice(1, arr.length);
-  var validatedData = new Array();
-
-  dataRows.forEach((row, i) => {
-    if (row.length == arr[0].length) {
-      var validatedRow = validateCsvRowData(dataHeaders, row);
+const validateCsvData = ([dataHeaders, ...dataRows]) => {   
+  const validatedData = [];
+  dataRows.forEach((row) => { 
+    if (row.length == dataHeaders.length) {
+      const validatedRow = validateCsvRowData(dataHeaders, row);
       validatedData.push(validatedRow);
-    }
+    } 
   });
   return validatedData;
 };
 
-const mergeDuplicateIds = (validatedData) => {
-  mergedData = new Array();
+const mergeDuplicateIds = (validatedData) => {  
+  const mergedData = [];
   validatedData.forEach((elem) => {
-    var duplicated = mergedData.filter((curr) => {
-      return curr.eid == elem.eid;
-    });
-
+    var duplicated = mergedData.filter((curr) =>curr.eid == elem.eid);
     if (duplicated.length) {
       var duplicatedIndex = mergedData.indexOf(duplicated[0]);
       mergedData[duplicatedIndex].addresses = _.uniq(
@@ -153,8 +148,8 @@ const mergeDuplicateIds = (validatedData) => {
   return mergedData;
 };
 
-pathInput = "./input.csv";
-pathOutput = "./output.json";
+pathInput = "./input1.csv";
+pathOutput = "./output1.json";
 var resultArray = splitFileOnRowsArrays(pathInput);
 resultArray = splitRowsByCommas(resultArray);
 resultArray = validateCsvData(resultArray);
