@@ -13,16 +13,16 @@ const writeFile = (path, data) => {
 };
 
 const splitRowsByCommas = (arr) => {
-  const result = []; 
+  const result = [];
   const regex = /,(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)/;
-  if (arr) { 
-    return arr.map((row) => row.split(regex));  
-  }  
+  if (arr) {
+    return arr.map((row) => row.split(regex));
+  }
 };
 
 const normalizeGroupsData = (groups) => {
-  let tmpGroups = [];    
-  groups.forEach((group) => { 
+  let tmpGroups = [];
+  groups.forEach((group) => {
     if (group.length > 0) {
       group = group.trim();
       tmpGroups = [...tmpGroups, group];
@@ -33,9 +33,9 @@ const normalizeGroupsData = (groups) => {
 
 const combineGroupsData = (resultArray, currGroups) => {
   const regex = /,|\/|"/;
-  const splitedGroups = currGroups.split(regex); 
-  const result = resultArray; 
-  result["groups"] = _.union(result["groups"], splitedGroups);   
+  const splitedGroups = currGroups.split(regex);
+  const result = resultArray;
+  result["groups"] = _.union(result["groups"], splitedGroups);
   result["groups"] = normalizeGroupsData(result["groups"]);
   delete result["group"];
 };
@@ -47,11 +47,11 @@ const removeQuotesFromHeader = (header) => {
 
 const splitHeaderTags = (header) => {
   var addrs = {
-    type: '',
+    type: "",
     tags: [],
-  }; 
+  };
   var splitedHeader = _.split(header, " ");
-  addrs.type = splitedHeader[0]; 
+  addrs.type = splitedHeader[0];
   _.pull(splitedHeader, splitedHeader[0]);
   addrs.tags = splitedHeader;
   return addrs;
@@ -68,7 +68,7 @@ const normalizeBooleanValues = (resultArr, header, data) => {
 };
 
 const validateCsvRowData = (dataHeaders, rowData) => {
-  const result = {}; 
+  const result = {};
   result.groups = [];
   result.addresses = [];
 
@@ -118,21 +118,21 @@ const validateCsvRowData = (dataHeaders, rowData) => {
   return result;
 };
 
-const validateCsvData = ([dataHeaders, ...dataRows]) => {   
+const validateCsvData = ([dataHeaders, ...dataRows]) => {
   const validatedData = [];
-  dataRows.forEach((row) => { 
+  dataRows.forEach((row) => {
     if (row.length == dataHeaders.length) {
       const validatedRow = validateCsvRowData(dataHeaders, row);
       validatedData.push(validatedRow);
-    } 
+    }
   });
   return validatedData;
 };
 
-const mergeDuplicateIds = (validatedData) => {  
+const mergeDuplicateIds = (validatedData) => {
   const mergedData = [];
   validatedData.forEach((elem) => {
-    var duplicated = mergedData.filter((curr) =>curr.eid == elem.eid);
+    var duplicated = mergedData.filter((curr) => curr.eid == elem.eid);
     if (duplicated.length) {
       var duplicatedIndex = mergedData.indexOf(duplicated[0]);
       mergedData[duplicatedIndex].addresses = _.uniq(
